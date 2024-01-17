@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Mashiur Rahman Animation </title>
+	<style>
+		*{margin: 0;padding: 0;}
+		#picker {
+		    position: fixed;
+		    bottom: 10px;
+		    right: 10px;
+		}
+		.myCanvas {
+		    display: flex;
+		    margin: 10px auto 0;
+		}
+	</style>
+</head>
+<body>
+	<div class="lmwrapper">
+		<canvas class="myCanvas" width="1280" height="720" style="border:1px solid #000000;">
+	Your browser does not support the HTML5 canvas tag.
+	</canvas>
+	</div>
+	
+	<div id="picker"></div>
+
+	<script src="iro.min.js"></script>
+
+	<script>
+(function function_name(argument) {
+
+let canvas = document.querySelector(".myCanvas");
+let ctx = canvas.getContext("2d");
+
+// Global variable for selected color
+let selectedColor = {r: 255, g: 255, b: 100}; // default light color in RGB
+
+// Load and draw the background image
+let background = new Image();
+background.src = 'maxresdefault.jpg'; // Specify the path to your background image
+background.onload = function(){
+    ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+    addDarkOverlay(); // Call function to add dark overlay
+    drawLights();
+}
+
+function addDarkOverlay() {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+async function drawLights() {
+    for(let i = 0; i < 18; i++) {
+        let x = 530 + ( i * 30 );
+        let y = 365;        
+        drawShadow(x, y + 15, 25);
+        drawStarEffect(x, y, 2, 8, 9);
+        await new Promise((resolve) => {setTimeout(() => resolve(true), 20)});
+    }
+
+    for(let i = 0; i < 11; i++) {
+        let x = 222 + ( i * 29 );
+        let y = 370 + (i / 3);        
+        drawShadow(x, y + 7, 20);
+        drawStarEffect(x, y, 1.5, 6, 9);
+        await new Promise((resolve) => {setTimeout(() => resolve(true), 20)});
+    }
+// return;
+    for(let i = 0; i < 7; i++) {
+        let x = 252 + ( i * 29 );
+        let y = 239 + (i / 3);        
+        drawShadow(x, y + 7, 20);
+        drawStarEffect(x, y, 1.5, 6, 9);
+        await new Promise((resolve) => {setTimeout(() => resolve(true), 20)});
+    }
+    for(let i = 0; i < 9; i++) {
+        let x = 620 + ( i * 28 );
+        let y = 244 + (i / 3);        
+        drawShadow(x, y + 7, 20);
+        drawStarEffect(x, y, 1.5, 6, 9);
+        await new Promise((resolve) => {setTimeout(() => resolve(true), 20)});
+    }
+    
+    for(let i = 0; i < 5; i++) {
+        let x = 442 + ( i * 22 );
+        let y = 228 - (i * 10);        
+        drawShadow(x, y + 7, 20);
+        drawStarEffect(x, y, 1.5, 6, 9);
+        await new Promise((resolve) => {setTimeout(() => resolve(true), 20)});
+    }
+    for(let i = 0; i < 4; i++) {
+        let x = 550 + ( i * 20 );
+        let y = 195 + (i * 10.5);        
+        drawShadow(x, y + 7, 20);
+        drawStarEffect(x, y, 1.5, 6, 9);
+        await new Promise((resolve) => {setTimeout(() => resolve(true), 20)});
+    }
+    for(let i = 0; i < 5; i++) {
+        let x = 570 + ( i * 17 );
+        let y = 190 - (i * 8);        
+        drawShadow(x, y + 7, 17);
+        drawStarEffect(x, y, 1.2, 6, 9);
+        await new Promise((resolve) => {setTimeout(() => resolve(true), 20)});
+    }
+    for(let i = 0; i < 6; i++) {
+        let x = 655 + ( i * 20 );
+        let y = 165 + (i * 10.5);        
+        drawShadow(x, y + 7, 17);
+        drawStarEffect(x, y, 1.2, 6, 9);
+        await new Promise((resolve) => {setTimeout(() => resolve(true), 20)});
+    }
+}
+
+function drawShadow(x, y, r) {
+    var radius = r;
+    var radialGradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
+    var shadowColor = `rgba(${selectedColor.r}, ${selectedColor.g}, ${selectedColor.b}, 0.3)`;
+    var shadowEndColor = `rgba(${selectedColor.r}, ${selectedColor.g}, ${selectedColor.b}, 0.0)`;
+    radialGradient.addColorStop(0, shadowColor);
+    radialGradient.addColorStop(1, shadowEndColor);
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, 2 * Math.PI);
+    ctx.fillStyle = radialGradient;
+    ctx.fill();
+}
+
+function drawStarEffect(x, y, innerRadius, outerRadius, numSpikes) {
+    var rotation = Math.PI / numSpikes;
+    var starColor = `rgba(${selectedColor.r}, ${selectedColor.g}, ${selectedColor.b}, 1)`;
+    ctx.save();
+    ctx.beginPath();
+    ctx.translate(x, y);
+    for (var i = 0; i < numSpikes; i++) {
+        ctx.rotate(rotation);
+        ctx.lineTo(0, 0 - outerRadius);
+        ctx.rotate(rotation);
+        ctx.lineTo(0, 0 - innerRadius);
+    }
+    ctx.closePath();
+    ctx.fillStyle = starColor;
+    ctx.fill();
+    ctx.restore();
+}
+
+// Initialize the color picker
+var colorPicker = new iro.ColorPicker("#picker", {
+  width: 150,
+  color: "rgb(255, 255, 100)",
+  layout: [
+    {
+      component: iro.ui.Box,
+    },
+    {
+      component: iro.ui.Slider,
+      options: {
+        id: 'hue-slider',
+        sliderType: 'hue'
+      }
+    }
+  ]
+});
+
+// Listen to color changes
+colorPicker.on('color:change', function(color) {
+  selectedColor = color.rgb;
+  ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+  addDarkOverlay();
+  drawLights();
+});
+})('message for you');
+
+	</script>
+
+</body>
+</html>
